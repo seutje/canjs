@@ -1,3 +1,10 @@
 language: node_js
 node_js: 0.10
 script: npm test
+matrix:
+	- TEST_SUITE=steal
+    - TEST_SUITE=dist
+    - TEST_SUITE=dev
+    - TEST_SUITE=amd
+    - TEST_SUITE=compatibility
+    - TEST_SUITE=individuals

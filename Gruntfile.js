@@ -1,4 +1,4 @@
-/*global __dirname */
+/*global __dirname, process */
 var path = require('path');
 // Returns mappings for AMDify
 var getAmdifyMap = function (baseName) {
@@ -9,6 +9,10 @@ var getAmdifyMap = function (baseName) {
 	amdifyMap['can/can'] = 'can';
 
 	return amdifyMap;
+};
+
+var getTestTask = function() {
+	return ['test' + ':' + (process.env.TEST_SUITE || 'all')];
 };
 
 module.exports = function (grunt) {
@@ -464,10 +468,13 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
-	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
-	grunt.registerTask('test:individuals', ['connect', 'qunit:individuals']);
-	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
+	grunt.registerTask('test', getTestTask());
+	grunt.registerTask('test:all', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
+	grunt.registerTask('test:compatibility', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
+	grunt.registerTask('test:individuals', ['jshint', 'connect', 'qunit:individuals']);
+	grunt.registerTask('test:dist', ['jshint', 'connect', 'build', 'testify:dist','qunit:dist']);
+	grunt.registerTask('test:steal', ['jshint', 'connect', 'testify','qunit:steal']);
+	grunt.registerTask('test:amd', ['jshint', 'connect', 'build', 'testify:amd','qunit:amd']);
+	grunt.registerTask('test:dev', ['jshint', 'connect', 'build', 'testify:dev','qunit:dev']);
 	grunt.registerTask('default', ['build']);
-	grunt.registerTask('test:steal', ['connect',  'testify','qunit:steal']);
-	grunt.registerTask('test:amd', ['connect',  'build','testify','qunit:amd']);
 };
