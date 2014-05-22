@@ -472,9 +472,9 @@ module.exports = function (grunt) {
 	grunt.registerTask('test:all', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('test:compatibility', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
 	grunt.registerTask('test:individuals', ['jshint', 'connect', 'qunit:individuals']);
-	grunt.registerTask('test:dist', ['jshint', 'connect', 'build', 'testify:dist','qunit:dist']);
-	grunt.registerTask('test:steal', ['jshint', 'connect', 'testify','qunit:steal']);
-	grunt.registerTask('test:amd', ['jshint', 'connect', 'build', 'testify:amd','qunit:amd']);
-	grunt.registerTask('test:dev', ['jshint', 'connect', 'build', 'testify:dev','qunit:dev']);
+	grunt.registerTask('test:dist', ['jshint', 'connect', 'build', 'testify:dist', 'pluginifyTests:latest', 'qunit:dist']);
+	grunt.registerTask('test:steal', ['jshint', 'connect', 'testify:libs','qunit:steal']);
+	grunt.registerTask('test:amd', ['jshint', 'connect', 'build', 'testify:amd', 'pluginifyTests:latest', 'qunit:amd']);
+	grunt.registerTask('test:dev', ['jshint', 'connect', 'build', 'testify:dev', 'pluginifyTests:latest', 'qunit:dev']);
 	grunt.registerTask('default', ['build']);
 };
