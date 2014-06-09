@@ -8,7 +8,7 @@ steal(
 	"./mustache_core.js",
 	"./mustache_helpers.js",
 	"can/view/callbacks",
-	function(can, parser, target,  HTMLSection, TextSection, mustacheCore, mustacheHelpers, viewCallbacks ){
+	function(can, parser, target,  HTMLSectionBuilder, TextSectionBuilder, mustacheCore, mustacheHelpers, viewCallbacks ){
 
 	// Make sure that we can also use our modules with Stache as a plugin
 	parser = parser || can.view.parser;
@@ -20,7 +20,7 @@ steal(
 		template = mustacheCore.cleanLineEndings(template);
 		
 		// The HTML section that is the root section for the entire template.
-		var section = new HTMLSection(),
+		var section = new HTMLSectionBuilder(),
 		
 			// This function is a catch all for taking a section and figuring out
 			// how to create a "renderer" that handles the functionality for a 
@@ -51,7 +51,7 @@ steal(
 					// the mustache text, and sets up live binding if an observable is read.
 					// A StringBranchRenderer function processes the mustache text and returns a 
 					// text value.  
-					var makeRenderer = section instanceof HTMLSection ?
+					var makeRenderer = section instanceof HTMLSectionBuilder ?
 						
 						mustacheCore.makeLiveBindingBranchRenderer:
 						mustacheCore.makeStringBranchRenderer;
@@ -222,7 +222,7 @@ steal(
 				
 				
 				if(expression === "else") {
-					section.inverse();
+					(state.attr && state.attr.section ? state.attr.section : section).inverse();
 					return;
 				}
 				
@@ -244,7 +244,7 @@ steal(
 				else if(state.attr) {
 					
 					if(!state.attr.section) {
-						state.attr.section = new TextSection();
+						state.attr.section = new TextSectionBuilder();
 						if(state.attr.value) {
 							state.attr.section.add(state.attr.value);
 						}
@@ -261,7 +261,7 @@ steal(
 						state.node.attributes.push( mustacheCore.makeLiveBindingBranchRenderer( null,expression, copyState() ) );
 					} else if( mode === "#" || mode === "^" ) {
 						if(!state.node.section) {
-							state.node.section = new TextSection();
+							state.node.section = new TextSectionBuilder();
 						}
 						makeRendererAndUpdateSection(state.node.section, mode, expression );
 					} else {

@@ -556,12 +556,22 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			expected: "Andy is missing!",
 			data: {
 				name: 'Andy'
-			}
+			},
+			liveData: new can.Map({
+				name: 'Andy'
+			})
 		};
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
-		deepEqual(getText(t.template,t.data), expected);
+		deepEqual(getText(t.template, t.data), expected);
+
+		// #1019 #unless does not live bind
+		var div = document.createElement('div');
+		div.appendChild(can.stache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, expected, '#unless condition false');
+		t.liveData.attr('missing', true);
+		deepEqual(div.innerHTML, '', '#unless condition true');
 	});
 
 	test("Handlebars helper: each", function () {
@@ -3451,4 +3461,44 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(can.$("my-tag").length, 1, "Element created in default namespace");
 	});
 
+	test("Partials are passed helpers (#791)", function () {
+		var t = {
+			template: "{{>partial}}",
+			expected: "foo",
+			partials: {
+				partial: '{{ help }}'
+			},
+			helpers: {
+				'help': function(){
+					return 'foo';
+				}
+			}
+		},
+		frag;
+		for (var name in t.partials) {
+			can.view.registerView(name, t.partials[name], ".stache")
+		}
+
+		frag = can.stache(t.template)({}, t.helpers);
+		equal(frag.childNodes[0].nodeValue, t.expected);
+	});
+
+	test("{{else}} with {{#unless}} (#988)", function(){
+		var tmpl = "<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>";
+
+		var frag = can.stache(tmpl)({ noData: true });
+		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+	});
+
+	test("{{else}} within an attribute (#974)", function(){
+		var tmpl = '<div class="{{#if color}}{{color}}{{else}}red{{/if}}"></div>',
+			data = new can.Map({
+				color: 'orange'
+			}),
+			frag = can.stache(tmpl)(data);
+
+		equal(frag.childNodes[0].getAttribute('class'), 'orange', 'if branch');
+		data.attr('color', false);
+		equal(frag.childNodes[0].getAttribute('class'), 'red', 'else branch');
+	});
 });

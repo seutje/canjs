@@ -81,9 +81,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		},
 		'unless': function (expr, options) {
-			if (!resolve(expr)) {
-				return options.fn(options.scope || this);
-			}
+			return helpers['if'].apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
 		},
 		'with': function (expr, options) {
 			var ctx = expr;
