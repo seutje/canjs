@@ -3805,4 +3805,15 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		var frag = can.mustache(tmpl)({ noData: true });
 		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
 	});
+
+	test("<col> inside <table> renders correctly (#1013)", 1, function() {
+		var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
+		var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
+		var frag = can.mustache(template)({
+			columns: new can.List([ { class: 'test' } ])
+		});
+
+		console.log(frag.childNodes)
+		equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
+	});
 });

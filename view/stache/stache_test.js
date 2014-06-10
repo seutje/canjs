@@ -3501,4 +3501,14 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		data.attr('color', false);
 		equal(frag.childNodes[0].getAttribute('class'), 'red', 'else branch');
 	});
+
+	test("<col> inside <table> renders correctly (#1013)", 1, function() {
+		var expected = '<table><colgroup><col style="width: 100px;"></colgroup><tbody></tbody></table>';
+		var template = '<table><colgroup>{{#columns}}<col style="width: {{width}}px;" />{{/columns}}</colgroup><tbody></tbody></table>';
+		var frag = can.stache(template)({
+			columns: new can.List([ { width: 100 } ])
+		});
+
+		equal(frag.childNodes[0].outerHTML, expected, '<col> nodes added in proper position');
+	});
 });
