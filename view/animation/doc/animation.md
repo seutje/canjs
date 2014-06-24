@@ -3,11 +3,13 @@
 
 # Example Usage
 
-## Fading in a component when it is inserted
+## Fading In
+Fading in a component when it is inserted
 
 `<app-component can-fade-in="slow"></app-component>``
 
-## Fading out a list element when it is inserted or removed
+## Fading In and Out
+Fading a list element when it is inserted or removed
 
 ```html
 <ul class="cart-list">
@@ -17,7 +19,8 @@
 </ul>
 ```
 
-## Performing a "bounce" animation for a cart widget when the cart length changes
+## Animation on a change
+Performing a "bounce" animation for a cart widget when the cart length changes
 
 ```html
 <div class="cart-widget">
@@ -37,7 +40,8 @@ scope{
 }
 ```
 
-## Display a spinning icon while loading model data, then fade in when model data is loaded.
+## Loading Spinner
+Display a spinning icon while loading model data, then fade in when model data is loaded.
 
 ```html
 <div can-fade-in="fast" can-animation-when="{products}">
@@ -53,21 +57,24 @@ scope{
 }
 ```
 
-## Defining a custom CSS animation to be performed when element is inserted.
+## Custom Animation on Insertion
+Defining a custom CSS animation to be performed when element is inserted.
 
 `<div can-animation-inserted="{cssProperties}"></div>``
 
-## Mixing attributes for a custom animation
+## Using Multiple Attributes
 
 ```html
 <div can-animation-duration="slow" can-animation-when="{scopeProperty}" can-animation-start="startFunction" can-animation-complete="completeFunction"></div>
 ```
 
-## Defaults for can-animation
+## Defaults
+Defaults displayed for reference
 
 `<div can-animation-style="display: block" can-animation-when="inserted" can-animation-duration="400"></div>``
 
-## Defining a custom animation using only the can-animation attribute. Defaults are specified where applicable
+## Advanced Custom Animation
+Defining a custom animation using only the can-animation attribute. Defaults are specified where applicable.
 
 `<div can-animation="{animationProperties}"></div>`
 
